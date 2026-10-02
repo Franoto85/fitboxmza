@@ -95,6 +95,32 @@
         io.observe(el);
       });
 
+    // Línea naranja de los títulos: crece al entrar en pantalla
+    const eyebrows = document.querySelectorAll("main .eyebrow");
+    const lio = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            en.target.classList.add("in");
+            lio.unobserve(en.target);
+          }
+        }),
+      { threshold: 0.4 }
+    );
+    eyebrows.forEach((el) => {
+      el.classList.add("grow");
+      lio.observe(el);
+    });
+
+    // Barra móvil: un único toque de atención a los 6s (una vez, sin parpadeo)
+    const sticky = document.querySelector(".sticky-cta");
+    if (sticky) {
+      window.setTimeout(() => sticky.classList.add("nudge"), 6000);
+      sticky.addEventListener("animationend", (e) => {
+        if (e.animationName === "cta-nudge") sticky.classList.remove("nudge");
+      });
+    }
+
     // Nav activa
     const links = document.querySelectorAll('.main-nav a[href^="#"]');
     const spy = new IntersectionObserver(

@@ -62,7 +62,7 @@ code{background:#000;border:1px solid var(--line);padding:.1rem .35rem;border-ra
   min-height:52px;letter-spacing:.01em;
   transition:background .16s ease,border-color .16s ease,transform .16s ease,box-shadow .16s ease}
 .btn-primary{background:var(--orange);color:var(--orange-ink);box-shadow:var(--shadow-btn)}
-.btn-primary:hover{background:var(--orange-hover);transform:translateY(-1px)}
+.btn-primary:hover{background:var(--orange-hover);transform:translateY(-2px);box-shadow:0 14px 32px rgba(244,106,22,.3)}
 .btn-primary:active{background:var(--orange-active);transform:none;box-shadow:none}
 .btn-ghost{background:rgba(255,255,255,.02);color:var(--white);border-color:var(--line-soft)}
 .btn-ghost:hover{border-color:var(--orange);color:var(--orange);background:rgba(244,106,22,.08)}
@@ -80,7 +80,8 @@ code{background:#000;border:1px solid var(--line);padding:.1rem .35rem;border-ra
 
 /* Header sticky */
 .site-header{position:sticky;top:0;z-index:50;background:rgba(14,14,14,.94);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
+  transition:background .25s ease,box-shadow .25s ease,border-color .25s ease}
 .site-header.scrolled{border-bottom-color:var(--line-soft);box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .header-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:76px}
 .brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;border-radius:10px}
@@ -174,7 +175,8 @@ code{background:#000;border:1px solid var(--line);padding:.1rem .35rem;border-ra
 
 /* Cards — planas, borde nítido, sin gradientes */
 .cards-4,.cards-3,.schedule-grid,.gallery-grid{display:grid;gap:1rem;margin-top:0}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;min-width:0;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
 .section-alt .card{background:var(--surface-2)}
 .card:hover{border-color:var(--line-soft)}
 .card-num{display:inline-flex;align-items:center;gap:.5rem;color:var(--orange);
@@ -193,7 +195,8 @@ code{background:#000;border:1px solid var(--line);padding:.1rem .35rem;border-ra
 .check-list.big{font-size:1.03rem}
 
 /* Horarios — legible en 390px: grilla 2x2 táctil */
-.schedule-card{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;min-width:0}
+.schedule-card{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;min-width:0;
+  transition:transform .2s ease,border-color .2s ease}
 .pill{display:inline-flex;align-items:center;min-height:36px;background:var(--orange);color:var(--orange-ink);
   font-weight:800;padding:.35rem .9rem;border-radius:999px;font-size:1rem;letter-spacing:.01em}
 .pill-ghost{background:transparent;color:var(--orange);border:2px solid var(--orange)}
@@ -217,7 +220,8 @@ code{background:#000;border:1px solid var(--line);padding:.1rem .35rem;border-ra
 /* Galería */
 .ph{margin:0;min-height:180px;border-radius:var(--radius-sm);border:1px dashed #4d4d4d;
   background:#151515;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:.35rem;text-align:center;padding:1.4rem;color:var(--gray-200)}
+  align-items:center;justify-content:center;gap:.35rem;text-align:center;padding:1.4rem;color:var(--gray-200);
+  transition:border-color .2s ease,transform .2s ease}
 .ph span{font-weight:800;font-size:1rem}
 .ph small{color:var(--orange);font-size:.875rem;font-weight:650}
 
@@ -269,13 +273,54 @@ code{background:#000;border:1px solid var(--line);padding:.1rem .35rem;border-ra
   border-top:1px solid var(--line-soft)}
 .sticky-cta .btn{min-height:52px;padding:.8rem .6rem;font-size:.93rem;border-radius:12px}
 
-/* Reveal — una sola transición sutil */
-.reveal{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}
-.reveal.visible{opacity:1;transform:none}
+/* Reveal — aparición suave por keyframes (600ms), sin frenar hovers */
+.reveal{opacity:0}
+.reveal.visible{animation:fit-rise .6s cubic-bezier(.22,.61,.36,1) both}
+@keyframes fit-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* Entrada escalonada de tarjetas */
+@media (prefers-reduced-motion:no-preference){
+  .cards-4 > .reveal.visible:nth-child(2){animation-delay:.07s}
+  .cards-4 > .reveal.visible:nth-child(3){animation-delay:.14s}
+  .cards-4 > .reveal.visible:nth-child(4){animation-delay:.21s}
+  .cards-3 > .reveal.visible:nth-child(2),
+  .schedule-grid > .reveal.visible:nth-child(2){animation-delay:.08s}
+  .cards-3 > .reveal.visible:nth-child(3),
+  .schedule-grid > .reveal.visible:nth-child(3){animation-delay:.16s}
+  .gallery-grid > .reveal.visible:nth-child(2){animation-delay:.06s}
+  .gallery-grid > .reveal.visible:nth-child(3){animation-delay:.12s}
+  .gallery-grid > .reveal.visible:nth-child(5){animation-delay:.06s}
+  .gallery-grid > .reveal.visible:nth-child(6){animation-delay:.12s}
+}
+/* Hovers con elevación solo donde hay puntero fino */
+@media (hover:hover){
+  .card:hover{transform:translateY(-3px);border-color:var(--line-soft)}
+  .card-activity.featured:hover{border-color:var(--orange)}
+  .schedule-card:hover{transform:translateY(-3px);border-color:var(--line-soft)}
+  .ph:hover{border-color:var(--orange)}
+  .btn-ghost:hover{transform:translateY(-2px)}
+}
+/* Hero: resplandor a la deriva, muy lento */
+@media (prefers-reduced-motion:no-preference){
+  .hero-glow{animation:glow-drift 14s ease-in-out infinite alternate}
+  .cta-final::before{animation:glow-drift 18s ease-in-out infinite alternate-reverse}
+  @keyframes glow-drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-36px,22px,0)}}
+}
+/* Títulos de sección: la línea naranja crece al entrar */
+@media (prefers-reduced-motion:no-preference){
+  .eyebrow.grow::before{transform:scaleX(0);transform-origin:left center;transition:transform .55s ease .1s}
+  .eyebrow.grow.in::before{transform:scaleX(1)}
+}
+/* Barra móvil: entrada suave + un único toque de atención */
+@media (prefers-reduced-motion:no-preference){
+  .sticky-cta{animation:cta-in .5s ease both}
+  @keyframes cta-in{from{transform:translateY(102%)}to{transform:translateY(0)}}
+  .sticky-cta.nudge{animation:cta-nudge .45s ease}
+  @keyframes cta-nudge{0%{transform:translateY(0)}35%{transform:translateY(-7px)}100%{transform:translateY(0)}}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none !important;animation:none !important}
-  .reveal{opacity:1;transform:none}
+  .reveal{opacity:1}
 }
 
 /* ≥720px */
